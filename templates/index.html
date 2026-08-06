@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOSM | Info Page</title>
+   
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <style>
+       
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --shadow-elegant: 0 20px 40px rgba(74, 59, 50, 0.08);
+            --shadow-hover: 0 30px 60px rgba(74, 59, 50, 0.15);
+        }
+
+        /* TAMBAHAN UNTUK SUPPORT DARK MODE DI INFO PAGE */
+        body.dark-mode {
+            --glass-bg: rgba(30, 30, 30, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-elegant: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        body {
+            background-color: var(--bg-cafe, #FDFBF7);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(212, 163, 115, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(130, 147, 104, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .home-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 20px 100px;
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            text-align: center;
+            padding: 20px 20px 60px;
+            animation: fadeInDown 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 4vw, 48px);
+            color: var(--text-heading, #4A3B32);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 2px 4px 10px rgba(74, 59, 50, 0.05);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-body, #6B5B53);
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+
+        /* MAIN COMPOSITE INFO BOX (GLASSMORPHISM) */
+        .composite-info {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-left: 8px solid var(--accent-color, #D4A373);
+            padding: 50px 60px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-elegant);
+            max-width: 1100px;
+            margin: 0 auto 60px auto;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            transition: all 0.5s ease;
+        }
+
+        .info-icon {
+            font-size: 60px;
+            color: white;
+            background: linear-gradient(135deg, var(--accent-color, #D4A373), #E29578);
+            width: 110px;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            flex-shrink: 0;
+            box-shadow: 0 15px 30px rgba(212, 163, 115, 0.3);
+            transform: rotate(-5deg);
+            transition: transform 0.4s ease;
+        }
+        
+        .composite-info:hover .info-icon {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .info-content h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-heading, #4A3B32);
+            font-size: 34px;
+            margin-bottom: 15px;
+        }
+
+        .info-content p {
+            font-size: 16px;
+            color: var(--text-body, #6B5B53);
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        /* FLOW ANIMATION (ARROWS TO CARDS) */
+        .flow-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in 0.8s forwards;
+        }
+
+        .flow-line {
+            width: 3px;
+            height: 50px;
+            background: linear-gradient(to bottom, rgba(212, 163, 115, 0.8), transparent);
+            border-radius: 5px;
+        }
+
+        .flow-arrows {
+            font-size: 30px;
+            color: var(--accent-color, #D4A373);
+            margin-top: -15px;
+            animation: bounce 2s infinite;
+            filter: drop-shadow(0 4px 6px rgba(212, 163, 115, 0.3));
+        }
+
+        /* 3-COLUMN GRID FOR INDEXES */
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .index-card {
+            background: var(--card-bg); /* KEMAS KINI: Guna variable CSS untuk tukar ikut mode */
+            border-radius: 24px;
+            padding: 45px 35px;
+            box-shadow: var(--shadow-elegant);
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* STAGGERED ENTRANCE & ACCENT COLORS */
+        .card-leading { animation-delay: 0.5s; }
+        .card-coincident { animation-delay: 0.7s; }
+        .card-lagging { animation-delay: 0.9s; }
+
+        /* Custom top color bars */
+        .index-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 6px;
+        }
+        .card-leading::before { background: var(--accent-color, #D4A373); }
+        .card-coincident::before { background: var(--text-heading, #4A3B32); }
+        .card-lagging::before { background: #829368; }
+
+        .index-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* CARD HEADER & DEFINITION */
+        .index-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--text-heading, #4A3B32);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .definition-box {
+            background: var(--input-bg); /* KEMAS KINI */
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px dashed var(--accent-color); /* KEMAS KINI */
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .definition-box p {
+            font-size: 14px;
+            color: var(--text-heading, #4A3B32);
+            font-style: italic;
+            line-height: 1.7;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* COMPONENT LIST */
+        .components-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text-heading, #4A3B32);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.8;
+        }
+        
+        .components-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(74, 59, 50, 0.1);
+        }
+
+        .component-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .component-list li {
+            font-size: 14px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: var(--input-bg); /* KEMAS KINI */
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+            color: var(--text-body, #6B5B53);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .component-list li:hover {
+            color: var(--text-heading, #4A3B32);
+            transform: translateX(5px) scale(1.02);
+            background: var(--bg-cafe); /* KEMAS KINI */
+            border-color: rgba(212, 163, 115, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+        
+        .component-list li i {
+            margin-top: 3px;
+            font-size: 14px;
+        }
+
+        /* Specific icon colors per card */
+        .card-leading .component-list li i { color: var(--accent-color, #D4A373); }
+        .card-coincident .component-list li i { color: var(--text-heading, #4A3B32); }
+        .card-lagging .component-list li i { color: #829368; }
+
+        /* ANIMATIONS KEYFRAMES */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 992px) {
+            .composite-info { flex-direction: column; text-align: center; gap: 20px; padding: 40px 30px; }
+            .info-icon { transform: rotate(0deg); margin-bottom: 10px; }
+            .info-content p { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="cafe-navbar">
+        <div class="brand-logo">
+            <!-- Jata Negara masuk di sini -->
+            <img src="{{ url_for('static', filename='jata_negara.png') }}" alt="Jata Negara" class="logo-img">
+            <h2>Economic Indicators  <span>Department</span></h2>
+        </div>
+        <div class="nav-links">
+            <!-- INFO PAGE ACTIVE -->
+            <a href="/" class="active">Info Page</a>
+            <a href="/composite">Composite Index</a>
+            <a href="/component">Component</a>
+            <a href="/mbcc">MBCC</a>
+            <!-- Dark Mode Button -->
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="home-container">
+        
+        <!-- HERO SECTION -->
+        <section class="hero-section">
+            <h1 class="hero-title">MALAYSIA ECONOMIC DASHBOARD</h1>
+            <p class="hero-subtitle">A comprehensive platform providing data-driven insights into economic cycles, trends, and national growth performance.</p>
+        </section>
+
+        <!-- MAIN DEFINITION: COMPOSITE INDEX -->
+        <div class="composite-info">
+            <div class="info-icon">
+                <i class="fa-solid fa-magnifying-glass-chart"></i>
+            </div>
+            <div class="info-content">
+                <h2>Composite Index</h2>
+                <p>
+                    The Composite Index is the combination of individual indicators which measures the economic cycles behaviour. The advantage of Composite Index compared to individual analysis is the tendency to smooth out some of the volatility of the series. The Composite Index is generally more reliable in generating clear and consistent turning points than individual indicators. There are three types of Composite Index in the Malaysian Economic Indicators, i.e. leading, coincident and lagging indexes.
+                </p>
+            </div>
+        </div>
+
+        <!-- FLOW VISUAL -->
+        <div class="flow-visual">
+            <div class="flow-line"></div>
+            <i class="fa-solid fa-angles-down flow-arrows"></i>
+        </div>
+
+        <!-- 3-COLUMN GRID: LEADING, COINCIDENT, LAGGING -->
+        <div class="index-grid">
+            
+            <!-- 1. LEADING INDEX CARD -->
+            <div class="index-card card-leading">
+                <h3>Leading Index</h3>
+                <div class="definition-box">
+                    <p>
+                        The Leading Index measures anticipations of the overall economic activity on average of four to six months ahead.
+                    </p>
+                </div>
+                
+                <h4 class="components-title">Components</h4>
+                <ul class="component-list">
+                    <li><i class="fa-solid fa-coins"></i> Real Money Supply, M1</li>
+                    <li><i class="fa-solid fa-industry"></i> Bursa Malaysia Industrial Index</li>
+                    <li><i class="fa-solid fa-microchip"></i> Real Imports of Semi Conductors</li>
+                    <li><i class="fa-solid fa-gem"></i> Real Imports of Other Basic Precious Metals</li>
+                    <li><i class="fa-solid fa-house-chimney"></i> Number of Housing Units Approved</li>
+                    <li><i class="fa-solid fa-money-bill-trend-up"></i> Expected Sales Value, Manufacturing</li>
+                    <li><i class="fa-solid fa-building"></i> Number of New Companies Registered</li>
+                </ul>
+            </div>
+
+            <!-- 2. COINCIDENT INDEX CARD -->
+            <div class="index-card card-coincident">
+                <h3>Coincident Index</h3>
+                <div class="definition-box">
+                    <p>
+                        The Coincident Index is a comprehensive measure of the overall current economic performance. 
+                    </p>
+                </div>
+                
+                <h4 class="components-title">Components</h4>
+                <ul class="component-list">
+                    <li><i class="fa-solid fa-users-gear"></i> Total Employment, Manufacturing</li>
+                    <li><i class="fa-solid fa-sack-dollar"></i> Real Salaries & Wages, Manufacturing</li>
+                    <li><i class="fa-solid fa-boxes-stacked"></i> Industrial Production Index</li>
+                    <li><i class="fa-solid fa-piggy-bank"></i> Real Contributions, EPF</li>
+                    <li><i class="fa-solid fa-gears"></i> Capacity Utilisation, Manufacturing</li>
+                    <li><i class="fa-solid fa-store"></i> Volume Index of Retail Trade</li>
+                </ul>
+            </div>
+
+            <!-- 3. LAGGING INDEX CARD -->
+            <div class="index-card card-lagging">
+                <h3>Lagging Index</h3>
+                <div class="definition-box">
+                    <p>
+                        The Lagging Index is to validate the signal of the Leading and Coincident Indexes.
+                    </p>
+                </div>
+                
+                <h4 class="components-title">Components</h4>
+                <ul class="component-list">
+                    <li><i class="fa-solid fa-file-invoice-dollar"></i> Unit Labour Cost, Manufacturing</li>
+                    <li><i class="fa-solid fa-handshake-angle"></i> Number of Investment Projects Approved</li>
+                    <li><i class="fa-solid fa-car"></i> Number of New Vehicles Registered</li>
+                    <li><i class="fa-solid fa-gas-pump"></i> Exports of Natural Gas & Crude oil</li>
+                    <li><i class="fa-solid fa-bell-concierge"></i> CPI for Services</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="cafe-footer">
+        <p>Dashboard Designed & Developed by <strong>Harits Akmal</strong></p>
+        
+        <!-- Masukkan link profil LinkedIn anda pada href -->
+        <a href="https://www.linkedin.com/in/haris-akmal" target="_blank" class="linkedin-btn">
+            <i class="fa-brands fa-linkedin"></i> Connect on LinkedIn
+        </a>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

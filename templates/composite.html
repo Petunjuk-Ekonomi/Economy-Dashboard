@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOSM | Composite Index</title>
+    <!-- Playfair Display (Serif) & Poppins (Sans) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+    <!-- NAVBAR (Composite Index is Active) -->
+    <nav class="cafe-navbar">
+        <div class="brand-logo">
+            <!-- Jata Negara dimasukkan di sini -->
+            <img src="{{ url_for('static', filename='jata_negara.png') }}" alt="Jata Negara" class="logo-img">
+            <h2>Economic Indicators  <span>Department</span></h2>
+        </div>
+        <div class="nav-links">
+            <a href="/">Info Page</a>
+            <!-- COMPOSITE INDEX ACTIVE DI SINI -->
+            <a href="/composite" class="active">Composite Index</a>
+            <a href="/component">Component</a>
+            <a href="/mbcc">MBCC</a>
+            <!-- Dark Mode Button -->
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="cafe-container fade-in">
+        <header class="page-header">
+            <h1>LEADING, COINCIDENT & LAGGING INDEXES DASHBOARD</h1>
+            <p>A refined perspective on economic indicators.</p>
+        </header>
+
+        <!-- Custom Dropdown Filter Panel -->
+        <div class="cafe-card filter-panel">
+            
+            <!-- Year Dropdown -->
+            <div class="custom-dropdown">
+                <label>Year</label>
+                <button class="drop-btn" onclick="toggleDrop('yearDrop')">Select Year(s) <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="drop-content" id="yearDrop">
+                    <label class="check-container"><input type="checkbox" value="All" class="year-check" checked onchange="handleAll('year-check', this)"> All</label>
+                    <script>for(let y=1991; y<=2026; y++) document.write(`<label class="check-container"><input type="checkbox" value="${y}" class="year-check" onchange="uncheckAll('year-check')"> ${y}</label>`);</script>
+                </div>
+            </div>
+
+            <!-- Month Dropdown -->
+            <div class="custom-dropdown">
+                <label>Month</label>
+                <button class="drop-btn" onclick="toggleDrop('monthDrop')">Select Month(s) <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="drop-content" id="monthDrop">
+                    <label class="check-container"><input type="checkbox" value="All" class="month-check" checked onchange="handleAll('month-check', this)"> All</label>
+                    <label class="check-container"><input type="checkbox" value="January" class="month-check" onchange="uncheckAll('month-check')"> January</label>
+                    <label class="check-container"><input type="checkbox" value="February" class="month-check" onchange="uncheckAll('month-check')"> February</label>
+                    <label class="check-container"><input type="checkbox" value="March" class="month-check" onchange="uncheckAll('month-check')"> March</label>
+                    <label class="check-container"><input type="checkbox" value="April" class="month-check" onchange="uncheckAll('month-check')"> April</label>
+                    <label class="check-container"><input type="checkbox" value="May" class="month-check" onchange="uncheckAll('month-check')"> May</label>
+                    <label class="check-container"><input type="checkbox" value="June" class="month-check" onchange="uncheckAll('month-check')"> June</label>
+                    <label class="check-container"><input type="checkbox" value="July" class="month-check" onchange="uncheckAll('month-check')"> July</label>
+                    <label class="check-container"><input type="checkbox" value="August" class="month-check" onchange="uncheckAll('month-check')"> August</label>
+                    <label class="check-container"><input type="checkbox" value="September" class="month-check" onchange="uncheckAll('month-check')"> September</label>
+                    <label class="check-container"><input type="checkbox" value="October" class="month-check" onchange="uncheckAll('month-check')"> October</label>
+                    <label class="check-container"><input type="checkbox" value="November" class="month-check" onchange="uncheckAll('month-check')"> November</label>
+                    <label class="check-container"><input type="checkbox" value="December" class="month-check" onchange="uncheckAll('month-check')"> December</label>
+                </div>
+            </div>
+
+            <!-- Index Dropdown -->
+            <div class="custom-dropdown">
+                <label>Index</label>
+                <button class="drop-btn" onclick="toggleDrop('indexDrop')">Select Index <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="drop-content" id="indexDrop">
+                    <label class="check-container"><input type="checkbox" value="All" class="index-check" checked onchange="handleAll('index-check', this)"> All</label>
+                    <label class="check-container"><input type="checkbox" value="LEADING INDEX" class="index-check" onchange="uncheckAll('index-check')"> Leading Index</label>
+                    <label class="check-container"><input type="checkbox" value="COINCIDENT INDEX" class="index-check" onchange="uncheckAll('index-check')"> Coincident Index</label>
+                    <label class="check-container"><input type="checkbox" value="LAGGING INDEX" class="index-check" onchange="uncheckAll('index-check')"> Lagging Index</label>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button class="btn-cafe" onclick="loadComposite()">Apply Filter</button>
+                <button class="btn-cafe-outline" onclick="resetFilters('comp')"><i class="fa-solid fa-rotate"></i> Reset</button>
+            </div>
+        </div>
+
+        <!-- CHARTS SECTION -->
+        <div class="cafe-card">
+            <h3 class="chart-title">Composite Index of Leading Index (LI), Coincident Index (CI), Lagging Index (LG) vs Year</h3>
+            <div class="scroll-container"><div class="canvas-wrapper" id="wrapperIndex"><canvas id="cIndexChart"></canvas></div></div>
+        </div>
+        
+        <div class="cafe-card">
+            <h3 class="chart-title">Annual Change of Composite Index (YoY)</h3>
+            <div class="scroll-container"><div class="canvas-wrapper" id="wrapperYoY"><canvas id="cYoYChart"></canvas></div></div>
+        </div>
+        
+        <div class="cafe-card">
+            <h3 class="chart-title">Monthly Change of Composite Index (MoM)</h3>
+            <div class="scroll-container"><div class="canvas-wrapper" id="wrapperMoM"><canvas id="cMoMChart"></canvas></div></div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="cafe-footer">
+        <p>Dashboard Designed & Developed by <strong>Harits Akmal</strong></p>
+        
+        <!-- Masukkan link profil LinkedIn anda pada href -->
+        <a href="https://www.linkedin.com/in/haris-akmal" target="_blank" class="linkedin-btn">
+            <i class="fa-brands fa-linkedin"></i> Connect on LinkedIn
+        </a>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
