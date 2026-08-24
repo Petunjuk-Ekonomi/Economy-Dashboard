@@ -208,6 +208,13 @@ function loadComponent() {
         data.mom.forEach((d, i) => setupLineDataset(d, cafePalette[i % cafePalette.length]));
 
         let optIndex = getCommonOptions('Component');
+        optIndex.plugins.tooltip.titleFont = { size: 12 };
+        optIndex.plugins.tooltip.bodyFont = { size: 10 };
+        optIndex.plugins.tooltip.padding = 8;
+        optIndex.plugins.tooltip.itemSort = (a, b) => b.raw - a.raw;
+        // Pastikan tooltip bar chart pun sentiasa di sebelah (center secara menegak)
+        optIndex.plugins.tooltip.yAlign = 'center'; 
+
         charts['cmpIndex'] = new Chart(document.getElementById('cmpIndexChart'), { 
             type: 'bar', 
             data: { labels: data.labels, datasets: data.idx }, 
@@ -218,6 +225,19 @@ function loadComponent() {
         optMoM.scales.y.ticks.callback = v => (v * 100).toFixed(0) + '%'; 
         optMoM.plugins.tooltip.callbacks = percentTooltip;
         
+        optMoM.plugins.tooltip.titleFont = { size: 12 };
+        optMoM.plugins.tooltip.bodyFont = { size: 10 };
+        optMoM.plugins.tooltip.padding = 8;
+        optMoM.plugins.tooltip.itemSort = (a, b) => b.raw - a.raw;
+        
+        // --- FIX UTAMA DI SINI ---
+        // yAlign 'center' memaksa anak panah (caret) berada di SISI kotak (kiri/kanan),
+        // dan secara automatik kotak akan beralih ke sebelah cursor, tidak lagi di atas/bawah.
+        optMoM.plugins.tooltip.yAlign = 'center';
+        
+        // Pastikan ia kekal membaca semua komponen untuk bulan tersebut
+        optMoM.interaction = { mode: 'index', intersect: false }; 
+
         charts['cmpMoM'] = new Chart(document.getElementById('cmpMoMChart'), { 
             type: 'line', 
             data: { labels: data.labels, datasets: data.mom }, 
