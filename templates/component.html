@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="custom-dropdown">
+           <div class="custom-dropdown">
                 <label>Index Category</label>
                 <button class="drop-btn" onclick="toggleDrop('cmpIndexDrop')">Select Index <i class="fa-solid fa-chevron-down"></i></button>
                 <div class="drop-content" id="cmpIndexDrop">
@@ -75,35 +75,40 @@
                 </div>
             </div>
 
-            <div class="custom-dropdown">
+           <div class="custom-dropdown">
                 <label>Component</label>
                 <button class="drop-btn" onclick="toggleDrop('cmpCompDrop')">Select Component <i class="fa-solid fa-chevron-down"></i></button>
                 <div class="drop-content" id="cmpCompDrop">
                     <label class="check-container"><input type="checkbox" value="All" class="cmp-comp-check" checked onchange="handleAll('cmp-comp-check', this)"> All Components</label>
                     
                     <!-- LEADING INDEX -->
-                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="PENAWARAN WANG, M1 (RM JUTA)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Penawaran Wang, M1</label>
-                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="INDEKS PERUSAHAAN BURSA MALAYSIA (1970=100)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Bursa Malaysia Indeks</label>
-                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="IMPORT SEMI KONDUKTOR (32101) (RM JUTA)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Import Semi Konduktor</label>
-                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="IMPORT LOGAM ASAS BERHARGA & LOGAM BUKAN FERUS LAIN (27209) (RM JUTA)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Import Logam Asas Berharga</label>
-                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="BILANGAN UNIT KEDIAMAN YANG DILULUSKAN PEMBINAAN" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Bil. Unit Kediaman Diluluskan</label>
-                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="JANGKAAN NILAI JUALAN, PEMBUATAN" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Jangkaan Nilai Jualan</label>
-                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="BILANGAN SYARIKAT BARU DIDAFTAR (TEMPATAN)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Bil. Syarikat Baru Didaftar</label>
+                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="REAL MONEY SUPPLY, M1" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Real Money Supply, M1</label>
+                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="BURSA MALAYSIA INDUSTRIAL INDEX" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Bursa Malaysia Industrial Index</label>
+                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="REAL IMPORTS OF SEMI CONDUCTORS" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Real Imports of Semi Conductors</label>
+                    <!-- Perhatikan space selepas NON- di bawah -->
+                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="REAL IMPORTS OF OTHER BASIC PRECIOUS & OTHER NON-FERROUS METALS" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Real Imports of Other Metals</label>
+                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="NUMBER OF HOUSING UNITS APPROVED" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Number of Housing Units Approved</label>
+                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="EXPECTED SALES VALUE, MANUFACTURING" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Expected Sales Value, Manufacturing</label>
+                    <label class="check-container comp-item-cmp" data-index="LEADING INDEX"><input type="checkbox" value="NUMBER OF NEW COMPANIES REGISTERED (LOCAL)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Number of New Companies Registered</label>
 
                     <!-- COINCIDENT INDEX -->
-                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="JUMLAH GUNA TENAGA DI SEKTOR PEMBUATAN" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Guna Tenaga Pembuatan</label>
-                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="GAJI & UPAH DI SEKTOR PEMBUATAN" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Gaji & Upah Pembuatan</label>
-                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="INDEKS PENGELUARAN PERINDUSTRIAN (2015=100)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Indeks Pengeluaran Perindustrian</label>
-                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="NILAI CARUMAN, KWSP (RM JUTA)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Nilai Caruman KWSP</label>
-                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="KAPASITI PENGGUNAAN DI SEKTOR PEMBUATAN" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Kapasiti Penggunaan Pembuatan</label>
-                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="INDEKS KUANTITI PERDAGANGAN RUNCIT (2015=100)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Indeks Perdagangan Runcit</label>
+                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="EMPLOYMENT IN MFG" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Total Employment, Manufacturing</label>
+                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="SALARIES & WAGES IN MFG" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Real Salaries & Wages, Manufacturing</label>
+                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="IPI (2015=100)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Industrial Production Index</label>
+                    <!-- Perhatikan space di hujung nilai EPF di bawah -->
+                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="EPF CONTRIBUTION" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Real Contributions, EPF</label>
+                    <!-- Ejaan CAPACITY dalam Excel guna huruf S -->
+                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="CAPACITY UTILIZATION, MFG" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Capacity Utilisation, Manufacturing</label>
+                    <label class="check-container comp-item-cmp" data-index="COINCIDENT INDEX"><input type="checkbox" value="VOLUME INDEX OF RETAIL TRADE" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Volume Index of Retail Trade</label>
 
                     <!-- LAGGING INDEX -->
-                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="KOS SEUNIT BURUH DI SEKTOR PEMBUATAN" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Kos Seunit Buruh Pembuatan</label>
-                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="BILANGAN PROJEK PELABURAN BARU DILULUSKAN" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Bil. Projek Pelaburan</label>
-                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="EKSPORT GAS ASLI & MINYAK MENTAH (11100)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Eksport Gas Asli & Minyak</label>
-                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="BILANGAN KENDERAAN BARU DIDAFTAR" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Bil. Kenderaan Baru Didaftar</label>
-                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="IHP PERKHIDMATAN (2010=100)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> IHP Perkhidmatan</label>
+                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="ULC" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Unit Labour Cost, Manufacturing</label>
+                    <!-- Tiada huruf S pada perkataan PROJECT dalam Excel -->
+                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="NUMBER OF INVESTMENT PROJECTS APPROVED" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Number of Investment Projects Approved</label>
+                    <!-- Perhatikan 6 space di tengah-tengah nilai ini -->
+                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="EXPORTS OF NATURAL GAS & CRUDE OIL (MSIC 11100)" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Exports of Natural Gas & Crude oil</label>
+                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="NEW REG, PRIVATE VEHICLES" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> Number of New Vehicles Registered</label>
+                    <label class="check-container comp-item-cmp" data-index="LAGGING INDEX"><input type="checkbox" value="CPI FOR SERVICES" class="cmp-comp-check" onchange="uncheckAll('cmp-comp-check')"> CPI for Services</label>
                 </div>
             </div>
 
@@ -113,17 +118,14 @@
             </div>
         </div>
 
-        <!-- CHARTS -->
+       <!-- CHARTS -->
         <div class="cafe-card">
             <h3 class="chart-title">Component of Leading Index (LI) , Coincident Index (CI), Lagging Index (LG) vs Year</h3>
             <div class="scroll-container"><div class="canvas-wrapper" id="wrapperCmpIndex"><canvas id="cmpIndexChart"></canvas></div></div>
         </div>
+        
         <div class="cafe-card">
-            <h3 class="chart-title">Annual Change of Component (YoY)</h3>
-            <div class="scroll-container"><div class="canvas-wrapper" id="wrapperCmpYoY"><canvas id="cmpYoYChart"></canvas></div></div>
-        </div>
-        <div class="cafe-card">
-            <h3 class="chart-title">Monthly Change of Component (MoM)</h3>
+            <h3 class="chart-title">Contribution of Each Component to the Percentage Change in the Component Index from the Previous Month</h3>
             <div class="scroll-container"><div class="canvas-wrapper" id="wrapperCmpMoM"><canvas id="cmpMoMChart"></canvas></div></div>
         </div>
 
