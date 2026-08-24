@@ -32,7 +32,6 @@ function toggleTheme() {
     }
     localStorage.setItem('theme', theme);
 
-    // Update Chart Grid & Text Colors Live
     updateChartColors();
 }
 
@@ -75,7 +74,6 @@ window.onclick = function(event) {
             if (dropdowns[i].classList.contains('show')) dropdowns[i].classList.remove('show');
         }
     }
-    // Tutup Modal jika klik luar gambar
     let modal = document.getElementById('infoModal');
     if (event.target === modal) closeModal();
 }
@@ -95,7 +93,6 @@ function getCheckedValues(className) {
     let values = [];
     for(let i=0; i<checks.length; i++) if(checks[i].checked) values.push(checks[i].value);
     
-    // PERUBAHAN: Guna pipe (|) sebagai pemisah
     return values.length === 0 ? 'All' : values.join('|');
 }
 
@@ -125,7 +122,7 @@ function closeModal() {
 // 3. INITIALIZATION
 // ==========================================
 document.addEventListener("DOMContentLoaded", function() {
-    initTheme(); // Set Theme
+    initTheme(); 
     
     const isDark = document.body.classList.contains('dark-mode');
     Chart.defaults.font.family = "'Poppins', sans-serif";
@@ -190,25 +187,42 @@ function loadComposite() {
 }
 
 function loadComponent() {
-    const years = getCheckedValues('cmp-year-check'); const months = getCheckedValues('cmp-month-check'); 
-    const indexes = getCheckedValues('cmp-index-check'); const comps = getCheckedValues('cmp-comp-check');
+    const years = getCheckedValues('cmp-year-check'); 
+    const months = getCheckedValues('cmp-month-check'); 
+    const indexes = getCheckedValues('cmp-index-check'); 
+    const comps = getCheckedValues('cmp-comp-check');
     
-    fetch(`/api/component?years=${years}&months=${months}&indexes=${indexes}&components=${comps}`).then(res => res.json()).then(data => {
+    fetch(`/api/component?years=${encodeURIComponent(years)}&months=${encodeURIComponent(months)}&indexes=${encodeURIComponent(indexes)}&components=${encodeURIComponent(comps)}`)
+    .then(res => res.json())
+    .then(data => {
         if (data.error) return alert(data.error);
-        destroyChart('cmpIndex'); destroyChart('cmpYoY'); destroyChart('cmpMoM');
+        
+        destroyChart('cmpIndex'); 
+        destroyChart('cmpMoM');
+        
         const calcWidth = Math.max(document.querySelector('.scroll-container').clientWidth, data.labels.length * 40) + 'px';
-        document.getElementById('wrapperCmpIndex').style.width = calcWidth; document.getElementById('wrapperCmpYoY').style.width = calcWidth; document.getElementById('wrapperCmpMoM').style.width = calcWidth;
+        if (document.getElementById('wrapperCmpIndex')) document.getElementById('wrapperCmpIndex').style.width = calcWidth; 
+        if (document.getElementById('wrapperCmpMoM')) document.getElementById('wrapperCmpMoM').style.width = calcWidth;
 
         data.idx.forEach((d, i) => { d.backgroundColor = cafePalette[i % cafePalette.length]; d.borderRadius = 2; });
-        data.yoy.forEach((d, i) => setupLineDataset(d, cafePalette[i % cafePalette.length]));
         data.mom.forEach((d, i) => setupLineDataset(d, cafePalette[i % cafePalette.length]));
 
         let optIndex = getCommonOptions('Component');
-        charts['cmpIndex'] = new Chart(document.getElementById('cmpIndexChart'), { type: 'bar', data: { labels: data.labels, datasets: data.idx }, options: optIndex });
-        let optYoY = getCommonOptions('Percentage'); optYoY.scales.y.ticks.callback = v => (v * 100).toFixed(0) + '%'; optYoY.plugins.tooltip.callbacks = percentTooltip;
-        charts['cmpYoY'] = new Chart(document.getElementById('cmpYoYChart'), { type: 'line', data: { labels: data.labels, datasets: data.yoy }, options: optYoY });
-        let optMoM = JSON.parse(JSON.stringify(optYoY)); optMoM.plugins.tooltip.callbacks = percentTooltip;
-        charts['cmpMoM'] = new Chart(document.getElementById('cmpMoMChart'), { type: 'line', data: { labels: data.labels, datasets: data.mom }, options: optMoM });
+        charts['cmpIndex'] = new Chart(document.getElementById('cmpIndexChart'), { 
+            type: 'bar', 
+            data: { labels: data.labels, datasets: data.idx }, 
+            options: optIndex 
+        });
+
+        let optMoM = getCommonOptions('Percentage'); 
+        optMoM.scales.y.ticks.callback = v => (v * 100).toFixed(0) + '%'; 
+        optMoM.plugins.tooltip.callbacks = percentTooltip;
+        
+        charts['cmpMoM'] = new Chart(document.getElementById('cmpMoMChart'), { 
+            type: 'line', 
+            data: { labels: data.labels, datasets: data.mom }, 
+            options: optMoM 
+        });
     });
 }
 
@@ -272,20 +286,12 @@ function loadMBCC() {
 
         let mbccOpt = {
             responsive: true, maintainAspectRatio: false,
-            // --- KAWALAN ANIMASI POP-UP ---
-            animation: {
-                duration: 1000
-            },
+            animation: { duration: 1000 },
             animations: {
                 x: { duration: 0 }, 
                 y: { duration: 0 }, 
-                radius: {
-                    from: 0, 
-                    duration: 800, 
-                    easing: 'easeOutBack' 
-                }
+                radius: { from: 0, duration: 800, easing: 'easeOutBack' }
             },
-            // ----------------------------------------------
             plugins: {
                 legend: { position: 'top', labels: { usePointStyle: true, color: textColor } },
                 tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: (${ctx.raw.x.toFixed(2)}, ${ctx.raw.y.toFixed(2)}) - ${ctx.raw.month}` } },
@@ -326,21 +332,16 @@ function loadMBCC() {
 }
 
 function updateComponentFilter() {
-    // PERUBAHAN: split('|')
     let checkedIndexes = getCheckedValues('mbcc-index-check').split('|');
     let compItems = document.querySelectorAll('.comp-item');
     compItems.forEach(item => {
         let itemIndex = item.getAttribute('data-index');
         let checkbox = item.querySelector('input');
-        if (checkedIndexes.includes('All')) {
+        if (checkedIndexes.includes('All') || checkedIndexes.includes(itemIndex)) {
             item.style.display = 'block';
         } else {
-            if (checkedIndexes.includes(itemIndex)) {
-                item.style.display = 'block'; 
-            } else {
-                item.style.display = 'none'; 
-                checkbox.checked = false; 
-            }
+            item.style.display = 'none'; 
+            checkbox.checked = false; 
         }
     });
 }
@@ -349,7 +350,6 @@ function updateComponentFilter() {
 // 6. COMPONENT FILTER LOGIC (NEW)
 // ==========================================
 function updateCmpComponentFilter() {
-    // PERUBAHAN: split('|')
     let checkedIndexes = getCheckedValues('cmp-index-check').split('|');
     let compItems = document.querySelectorAll('.comp-item-cmp');
     
@@ -357,15 +357,11 @@ function updateCmpComponentFilter() {
         let itemIndex = item.getAttribute('data-index');
         let checkbox = item.querySelector('input');
         
-        if (checkedIndexes.includes('All')) {
+        if (checkedIndexes.includes('All') || checkedIndexes.includes(itemIndex)) {
             item.style.display = 'block';
         } else {
-            if (checkedIndexes.includes(itemIndex)) {
-                item.style.display = 'block'; 
-            } else {
-                item.style.display = 'none'; 
-                checkbox.checked = false; 
-            }
+            item.style.display = 'none'; 
+            checkbox.checked = false; 
         }
     });
 }
